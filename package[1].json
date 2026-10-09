@@ -1,0 +1,10 @@
+{
+  "name": "securemonitor-ai",
+  "version": "1.0.0",
+  "description": "SecureMonitor AI - device monitoring and anomaly alerts (laptop, mobile, ESP32/IoT) with n8n integration",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" },
+  "license": "UNLICENSED",
+  "private": true
+}

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SecureMonitor AI</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#07111F;--bg2:#0B1628;--card:#101D31;--blue:#2563EB;--cyan:#06B6D4;--ok:#22C55E;--warn:#F59E0B;--bad:#EF4444;--tx:#F8FAFC;--mu:#94A3B8;--ln:#1e2d47;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html{background:var(--bg)}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.5 Inter,system-ui,sans-serif}
+.app{display:grid;grid-template-columns:200px 1fr;min-height:100vh}
+aside{display:flex;flex-direction:column;background:var(--bg2);border-right:1px solid var(--ln);padding:16px 12px}
+.logo{font-weight:600;margin:4px 8px 18px;display:flex;gap:8px;align-items:center}.logo i{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan))}
+nav button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:0;color:var(--mu);padding:11px 12px;border-radius:8px;font:inherit;cursor:pointer;min-height:44px}
+nav button.on{background:#12294a;color:var(--cyan);box-shadow:inset 3px 0 0 var(--blue)}nav button svg{pointer-events:none}
+.authmode main{max-width:none;padding:0}.authmode .authwrap{min-height:100vh;display:grid;place-items:center;padding:16px;background:radial-gradient(circle at 18% 8%,#2563eb33,transparent 45%),radial-gradient(circle at 88% 92%,#06b6d426,transparent 42%),var(--bg)}
+.auth{width:100%;max-width:420px;margin:0;box-shadow:0 20px 50px #0008}.auth h1{font-size:22px}
+.tb{width:100%;border-collapse:collapse}.tb th{color:var(--mu);font-weight:500;text-align:left;font-size:12px;padding:6px 8px}.tb td{padding:10px 8px;border-top:1px solid var(--ln)}.tb tr[data-a]{cursor:pointer}.tw{overflow-x:auto}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:-4px 0 14px;padding-bottom:12px;border-bottom:1px solid var(--ln)}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+main{padding:20px;max-width:1100px;width:100%}
+header.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+h1{font-size:20px;margin:0}h2{font-size:15px;margin:0 0 10px}.mu{color:var(--mu)}.sm{font-size:12px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-bottom:12px}
+.card{background:linear-gradient(180deg,#112038,var(--card));border:1px solid var(--ln);border-radius:14px;padding:16px;box-shadow:0 6px 18px #0004}
+.row{display:flex;justify-content:space-between;gap:8px;padding:4px 0}
+.badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid}
+.NORMAL{color:var(--ok);border-color:var(--ok)}.MEDIUM{color:var(--warn);border-color:var(--warn)}.HIGH{color:var(--bad);border-color:var(--bad)}.demo{color:var(--cyan);border-color:var(--cyan)}
+.bar{height:6px;background:#0b1628;border-radius:9px;overflow:hidden;margin:2px 0 8px}.bar b{display:block;height:100%;background:var(--blue)}
+button.b,select,input{font:inherit;background:var(--bg2);color:var(--tx);border:1px solid var(--ln);border-radius:8px;padding:9px 12px;min-height:40px}
+button.b{cursor:pointer}button.p{background:var(--blue);border-color:var(--blue)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.alert{display:grid;grid-template-columns:1fr auto;gap:6px;padding:10px 0;border-top:1px solid var(--ln);cursor:pointer}
+.sw{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--ln)}
+ul{margin:6px 0 0;padding-left:18px}
+.auth{max-width:400px;margin:5vh auto}.auth label{display:block;margin:10px 0 2px}.auth input:not([type=checkbox]){width:100%}.err{color:var(--bad)}.ok{color:var(--ok)}
+@media(max-width:720px){.app{grid-template-columns:minmax(0,1fr)}nav button{flex:1;min-width:0;flex-direction:column;gap:2px;padding:6px 2px;font-size:12px;justify-content:center;text-align:center}aside{min-width:0;border:0;border-bottom:1px solid var(--ln);padding:8px}nav{display:flex;gap:4px}nav button{text-align:center}.logo{display:none}main{padding:14px}}
+</style></head><body>
+<div class="app"><aside><div class="logo"><svg width="20" height="20" style="color:var(--cyan)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>SecureMonitor AI</div>
+<nav aria-label="Main"><button data-t="dash" class="on"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg> Dashboard</button><button data-t="devices"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg> Devices</button><button data-t="alerts"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg> Alerts</button><button data-t="set"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg> Settings</button></nav>
+<div id="usr" class="sm mu" style="margin-top:auto;padding:14px 8px 0"></div></aside>
+<main id="m" aria-live="polite"></main></div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+// API base URL: saved override > window.VITE_API_BASE_URL / <meta name="api-base-url"> > the origin serving this page (same-origin) > production default
+const DEFAULT_API='';
+function baseCandidates(){
+ const m=document.querySelector('meta[name="api-base-url"]');
+ const env=(window.VITE_API_BASE_URL||(m&&m.content)||'').trim();
+ const here=/^https?:$/.test(location.protocol)?location.origin:'';
+ return [...new Set([S.cfg.override,env,here].filter(Boolean).map(x=>x.replace(/\/$/,'')))];
+}
+function resolveBase(){return baseCandidates()[0]||''}
+async function pickBase(){
+ if(S.cfg.override){S.cfg.base=S.cfg.override;return}
+ for(const b of baseCandidates()){
+  try{const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),6000);
+   const r=await fetch(b+'/api/health',{credentials:'include',signal:ctl.signal});clearTimeout(t);
+   const d=r.ok?await r.json():null;
+   if(d&&d.app==='securemonitor'){S.cfg.base=b;return}
+  }catch(e){console.warn('[SecureMonitor] backend not reachable at',b,e&&e.message)}
+ }
+ S.cfg.base='';
+}
+const NA='Not available';const OUT='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>';
+let S={srvAlerts:[],tab:'dash',demo:null,metrics:null,ev:null,last:null,alerts:[],sel:null,
+ cfg:{poll:30,cooldown:10,base:'',token:'',email:true,push:false,cats:{temp:true,batt:true,stor:true,net:true,iot:true}},remote:null,remoteErr:null,user:null,access:null,guest:false,screen:'login',authMsg:'',authOk:false,resetToken:null,conn:null};
+try{Object.assign(S.cfg,JSON.parse(localStorage.getItem('sm_cfg')||'{}'));S.alerts=JSON.parse(localStorage.getItem('sm_alerts')||'[]')}catch(e){}
+S.cfg.override='';
+S.cfg.base=resolveBase();
+const save=()=>{try{localStorage.setItem('sm_cfg',JSON.stringify({...S.cfg,base:undefined}));localStorage.setItem('sm_alerts',JSON.stringify(S.alerts.slice(0,100)))}catch(e){}};
+
+// ---- REAL data: only what the browser genuinely exposes on THIS device ----
+async function collect(){
+ const n=navigator,m={};
+ const ua=n.userAgent;m.kind=/Mobi|Android|iPhone|iPad/i.test(ua)?'Mobile':'Laptop';
+ m.online=n.onLine;m.cores=n.hardwareConcurrency||null;m.deviceMemoryGb=n.deviceMemory||null;
+ const c=n.connection||n.mozConnection;
+ m.netType=c?c.effectiveType:null;m.downlink=c&&c.downlink!=null?c.downlink:null;m.rtt=c&&c.rtt!=null?c.rtt:null;
+ m.battery=null;m.charging=null;
+ try{if(n.getBattery){const b=await n.getBattery();m.battery=Math.round(b.level*100);m.charging=b.charging}}catch(e){}
+ m.storagePct=null;m.storageUsedMb=null;
+ try{if(n.storage&&n.storage.estimate){const e=await n.storage.estimate();if(e.quota){m.storagePct=+(e.usage/e.quota*100).toFixed(2);m.storageUsedMb=+(e.usage/1048576).toFixed(1)}}}catch(e){}
+ m.heapPct=null;const pm=performance.memory;if(pm&&pm.jsHeapSizeLimit)m.heapPct=+(pm.usedJSHeapSize/pm.jsHeapSizeLimit*100).toFixed(1);
+ return m}
+const DEMO={
+ NORMAL:{kind:'Laptop',online:true,cores:8,deviceMemoryGb:8,netType:'4g',downlink:25,rtt:40,battery:84,charging:false,storagePct:20,storageUsedMb:900,heapPct:22},
+ MEDIUM:{kind:'Laptop',online:true,cores:8,deviceMemoryGb:8,netType:'3g',downlink:2,rtt:300,battery:18,charging:false,storagePct:60,storageUsedMb:2400,heapPct:75},
+ HIGH:{kind:'Laptop',online:false,cores:8,deviceMemoryGb:8,netType:null,downlink:null,rtt:null,battery:7,charging:false,storagePct:92,storageUsedMb:9000,heapPct:90}};
+
+// ---- Rule-based assessment (browser-only mode; in agent mode the backend supplies this) ----
+function evaluate(m){
+ let sc=0,why=[],act=[],aff=[];
+ const A={batt:'Connect the device to a charger.',stor:'Free storage by removing unnecessary files or unused applications.',mem:'Close unused applications to reduce memory usage.',net:'Review active applications and network connections.'};
+ if(m.battery!=null&&!m.charging){if(m.battery<=10){sc+=3;why.push('Battery critically low');aff.push('Battery');act.push(A.batt)}else if(m.battery<=20){sc+=2;why.push('Battery low');aff.push('Battery');act.push(A.batt)}}
+ if(m.storagePct!=null&&m.storagePct>85){sc+=2;why.push('Browser storage almost full');aff.push('Storage');act.push(A.stor)}
+ if(m.heapPct!=null){if(m.heapPct>85){sc+=2;why.push('High page memory use');aff.push('Memory');act.push(A.mem)}else if(m.heapPct>70){sc+=1;why.push('Elevated page memory use');aff.push('Memory');act.push(A.mem)}}
+ if(!m.online){sc+=2;why.push('No network connection');aff.push('Network');act.push(A.net)}
+ else if(m.netType==='2g'||m.netType==='slow-2g'||(m.rtt!=null&&m.rtt>250)){sc+=1;why.push('Poor network quality');aff.push('Network');act.push(A.net)}
+ const risk=sc>=3?'HIGH':sc>=1?'MEDIUM':'NORMAL';
+ if(risk!=='NORMAL')act.push('Monitor the device for repeated abnormal behaviour.');
+ return{risk,score:sc,reason:risk==='NORMAL'?'No unusual behaviour detected.':(risk==='HIGH'?'Multiple abnormal behaviour indicators detected: ':'One or more unusual behaviour indicators detected: ')+why.join(', ')+'.',actions:[...new Set(act)],affected:aff,
+  note:risk==='NORMAL'?'No unusual conditions in the readings currently available.':'Readings fall outside normal ranges. This does not confirm compromise.'}}
+
+// ---- Optional agent backend (VITE_API_BASE_URL equivalent): real Laptop/Mobile/IoT agents via your API ----
+function raw(path,opt={}){const h={'Content-Type':'application/json'};if(S.access)h.Authorization='Bearer '+S.access;
+ return fetch(S.cfg.base.replace(/\/$/,'')+path,{credentials:'include',...opt,headers:h})}
+let rf=null;
+function refreshSession(){
+ if(!rf)rf=(async()=>{
+  const run=async()=>{try{const r=await raw('/api/auth/refresh',{method:'POST'});if(!r.ok)return false;const d=await r.json();if(typeof d.accessToken!=='string')return false;S.access=d.accessToken;return true}catch(e){return false}};
+  try{return navigator.locks?await navigator.locks.request('sm-refresh',run):await run()}finally{rf=null}})();
+ return rf}
+async function api(path,opt){
+ let r=await raw(path,opt);
+ if(r.status===401){if(await refreshSession())r=await raw(path,opt);if(r.status===401){expire();throw new Error('Your session has expired. Please log in again.')}}
+ if(!r.ok)throw new Error('Unable to connect to monitoring service.');
+ return r.json()}
+async function health(){if(!S.cfg.base){S.conn=null;return}try{const r=await raw('/api/health');S.conn=r.ok}catch(e){S.conn=false}}
+async function pullRemote(){
+ if(!S.cfg.base||!S.user){S.remote=null;S.remoteErr=null;return}
+ try{const d=await api('/api/devices');S.remote=Array.isArray(d)?d:[];S.remoteErr=null
+  const al=await api('/api/alerts');S.srvAlerts=(Array.isArray(al)?al:[]).map(x=>({id:'s'+x.id,sid:x.id,srv:true,ts:Date.parse(x.time)||Date.now(),device:x.device||'Device',type:x.alertType||'Alert',risk:x.risk,score:x.anomalyScore,reason:x.reason,actions:x.recommendations||[],aff:[],note:'This alert does not by itself confirm hacking or compromise.',status:x.status||'OPEN',demo:false}));
+  if(!S.setLoaded){S.setLoaded=true;try{const st=await api('/api/settings/notifications');if(st&&typeof st==='object'){S.cfg.email=!!st.email;S.cfg.push=!!st.push;Object.assign(S.cfg.cats,st.cats||{})}}catch(e){}}}
+ catch(e){S.remote=null;S.remoteErr=e.message.includes('session')?e.message:'Unable to connect to monitoring service. Please check your connection and try again.'}}
+
+function logAlert(ev,m,demo){
+ if(ev.risk==='NORMAL')return;
+ const key=ev.risk+'|'+ev.reason,now=Date.now();
+ const dup=S.alerts.find(a=>a.key===key&&a.demo===demo&&now-a.ts<S.cfg.cooldown*60000);
+ if(dup)return;
+ S.alerts.unshift({id:now+'',key,ts:now,device:m.kind,type:ev.affected.join(' / ')||'Anomaly',risk:ev.risk,score:ev.score,reason:ev.reason,actions:ev.actions,aff:ev.affected,note:ev.note,status:'OPEN',demo,m});save()}
+
+async function refresh(){
+ if(!S.user&&!S.guest)return;
+ const demo=S.demo;const m=demo?DEMO[demo]:await collect();
+ S.metrics=m;S.ev=evaluate(m);S.last=new Date();logAlert(S.ev,m,!!demo);
+ await health();await pullRemote();render()}
+
+const bar=v=>v==null?'':`<div class="bar" role="progressbar" aria-valuenow="${v}" aria-valuemin="0" aria-valuemax="100"><b style="width:${Math.min(100,v)}%"></b></div>`;
+const val=(v,u='')=>v==null?`<span class="mu">${NA}</span>`:esc(v)+u;
+const R=(k,v)=>`<div class="row"><span class="mu">${k}</span><span>${v}</span></div>`;
+const tm=ts=>new Date(ts).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+const badge=r=>`<span class="badge ${r}">${r}</span>`;
+
+function deviceCards(){
+ const m=S.metrics,e=S.ev;
+ const here=`<div class="card"><h2>${esc(m.kind)} <span class="mu sm">(this device)</span></h2><span class="badge NORMAL">${S.demo?'Demo':'Connected'}</span>
+ ${R('Battery',m.battery==null?val(null):m.battery+'%'+(m.charging?' ⚡ charging':''))}${bar(m.battery)}
+ ${R('Browser storage',val(m.storagePct,'%'))}${bar(m.storagePct)}
+ ${R('Page memory',val(m.heapPct,'%'))}${bar(m.heapPct)}
+ ${R('Device RAM',m.deviceMemoryGb?'≥ '+m.deviceMemoryGb+' GB':val(null))}${R('CPU cores',val(m.cores))}
+ ${R('Network',m.online?val(m.netType)+(m.downlink!=null?' · '+m.downlink+' Mbps':''):'Offline')}${R('Risk',badge(e.risk))}</div>`;
+ const rem=t=>{const d=(S.remote||[]).filter(x=>(x.type||'').toLowerCase()===t);
+  if(!d.length){const msg={laptop:'Connect the SecureMonitor desktop agent to start monitoring.',mobile:'Install the SecureMonitor mobile app to start monitoring.',iot:'IoT hardware is optional. Connect an ESP32 sensor device to enable hardware monitoring.'}[t];
+   return `<div class="card"><h2>${t==='iot'?'IoT Hardware <span class="badge demo">Optional</span>':t==='laptop'?'Remote Laptop':'Remote Mobile'}</h2><span class="badge MEDIUM" style="color:var(--mu);border-color:var(--mu)">${t==='iot'?'Not Connected':'Offline'}</span><p class="mu">${msg}</p></div>`}
+  return d.map(x=>{const mt=x.metrics||{};return `<div class="card"><h2>${esc(x.name||t)}</h2><span class="badge ${x.connected?'NORMAL':''}">${x.connected?'Connected':'Offline'}</span>
+   ${Object.keys(mt).map(k=>R(esc(k),val(mt[k]))).join('')}${R('Risk',x.risk?badge(esc(x.risk)):val(null))}<p class="mu sm">${esc(x.reason||'')}</p></div>`}).join('')};
+ return here+(S.cfg.base&&S.remote?rem('laptop')+rem('mobile')+rem('iot'):'')}
+
+function connLbl(){return S.conn===true?'<span style="color:var(--ok)"><i class="dot" style="background:var(--ok)"></i>Connected</span>':S.conn===false?'<span style="color:var(--bad)"><i class="dot" style="background:var(--bad)"></i>Connection unavailable</span>':'<span><i class="dot" style="background:var(--mu)"></i>This device only</span>'}
+const allAlerts=()=>[...S.srvAlerts.filter(()=>!S.demo),...S.alerts.filter(a=>a.demo===!!S.demo)].sort((a,b)=>b.ts-a.ts);
+function topbar(){return `<div class="topbar"><b>SecureMonitor AI</b><span class="sm">${connLbl()} &nbsp;·&nbsp; ${esc(S.user?S.user.name||S.user.email:'Guest')}</span></div>`}
+function dash(){
+ const e=S.ev,open=allAlerts().filter(a=>a.status==='OPEN').length;
+ const remoteMsg=S.remote&&!S.remote.length?`<div class="card mu">Showing real readings from <b>this device</b>. Connect a device to start monitoring: open Devices → Connect Hardware to get an agent key for the laptop agent, mobile app or optional ESP32.</div>`
+  :S.remoteErr?`<div class="card" style="border-color:var(--bad)">${esc(S.remoteErr)}</div>`:'';
+ return `<header class="top"><div><h1>Device Monitoring</h1><div class="mu">Monitor device health, detect unusual conditions, and receive actionable alerts.</div></div>
+ <div>${S.demo?'<span class="badge demo">DEMO DATA</span> ':''}<span class="sm mu">${connLbl()} · Last updated: ${S.last.toLocaleTimeString()}</span></div></header>
+ <div class="card" style="margin-bottom:12px"><span class="mu sm">Demo mode:</span> 
+ ${['NORMAL','MEDIUM','HIGH'].map(r=>`<button class="b ${S.demo===r?'p':''}" data-demo="${r}">${r==='NORMAL'?'Normal':r==='MEDIUM'?'Medium Risk':'High Risk'}</button>`).join(' ')}
+ <button class="b ${!S.demo?'p':''}" data-demo="">Live</button></div>
+ <div class="grid">${[['Monitoring',S.conn===false?'Unavailable':'Active'],['Connected Devices',1+(S.remote||[]).filter(x=>x.connected).length],['Active Alerts',open],['Current Risk',badge(e.risk)]].map(([k,v])=>`<div class="card"><div class="mu sm">${k}</div><div style="font-size:20px;font-weight:600">${v}</div></div>`).join('')}</div>
+ ${remoteMsg}<div class="grid">${deviceCards()}</div>
+ <div class="grid"><div class="card"><h2>Current Risk</h2>${R('Risk Level',badge(e.risk))}${R('Anomaly Score',e.score)}<p>${esc(e.reason)}</p></div>
+ <div class="card"><h2>AI Security Assessment</h2><p>${esc(e.note)} <span class="mu sm">(Local rule-based summary. A Gemini assessment from your backend will appear here when provided.)</span></p><p class="mu sm">AI provides an additional assessment layer. Rule-based anomaly detection determines the primary risk classification.<br>Generated at ${S.last.toLocaleTimeString()}</p></div></div>
+ ${e.actions.length?`<div class="card" style="margin-bottom:12px"><h2>Recommended Actions</h2><ul>${e.actions.map(a=>`<li>${esc(a)}</li>`).join('')}</ul><p class="mu sm">Suggestions only. Nothing is changed automatically.</p></div>`:''}
+ <div class="card"><h2>Recent Alerts</h2>${alertList(allAlerts().slice(0,5))}</div>`}
+
+function alertList(l){
+ if(!l.length)return '<p class="mu">No active alerts</p>';
+ return `<div class="tw"><table class="tb"><thead><tr><th>Device</th><th>Alert</th><th>Risk</th><th>Time</th><th>Status</th></tr></thead><tbody>`+l.map(a=>`<tr data-a="${a.id}" tabindex="0"><td>${esc(a.device)} ${a.demo?'<span class="badge demo">DEMO</span>':''}</td><td>${esc(a.type)}</td><td>${badge(a.risk)}</td><td>${tm(a.ts)}</td><td>${a.status} ${a.status==='OPEN'?`<button class="b" data-res="${a.id}">Resolve</button>`:''}</td></tr>`).join('')+'</tbody></table></div>'}
+function devicesPage(){
+ const rows=[[S.metrics.kind+' (this device)',S.metrics.kind,S.demo?'Demo':'Connected',S.last.toLocaleTimeString(),S.ev.risk]].concat((S.remote||[]).map(x=>[x.name||x.type,x.type,x.connected?'Connected':'Offline',x.updatedAt?new Date(x.updatedAt).toLocaleTimeString():NA,x.risk||null]));
+ return `<header class="top"><div><h1>Devices</h1><div class="mu">All devices registered to your account.</div></div></header><div class="card"><div class="tw"><table class="tb"><thead><tr><th>Name</th><th>Type</th><th>Connection</th><th>Last Updated</th><th>Risk</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]?badge(esc(r[4])):'<span class="mu">'+NA+'</span>'}</td></tr>`).join('')}</tbody></table></div></div>
+ <div class="card" style="margin-top:12px"><h2>Optional IoT Hardware <span class="badge demo">Optional</span></h2><p class="mu">Connect an ESP32-based sensor device for additional environmental and electrical monitoring.</p><span class="badge" style="color:var(--mu);border-color:var(--mu)">${(S.remote||[]).some(x=>(x.type||'').toLowerCase()==='iot'&&x.connected)?'Connected':'Not Connected'}</span><p class="mu sm">Hardware not connected. Devices appear here once their agent reports to your backend.</p><button class="b p" data-act="hw">Connect Hardware</button><p id="fl" role="status"></p></div>`}
+function alertsPage(){
+ const a=allAlerts().find(x=>x.id===S.sel);
+ return `<header class="top"><h1>Alerts</h1></header><div class="card">${alertList(allAlerts())}</div>
+ ${a?`<div class="card" style="margin-top:12px"><h2>Alert details</h2>${R('Device',esc(a.device))}${R('Risk',badge(a.risk))}${R('Anomaly Score',a.score)}${R('Timestamp',new Date(a.ts).toLocaleString())}<p>${esc(a.reason)}</p>
+ <div class="mu sm">Affected metrics: ${esc(a.aff.join(', ')||NA)}</div><p>${esc(a.note)}</p><b>Recommended Actions</b><ul>${a.actions.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}`}
+
+function settings(){
+ const c=S.cfg,sw=(id,l,v)=>`<label class="sw"><span>${l}</span><input type="checkbox" data-sw="${id}" ${v?'checked':''}></label>`;
+ return `<header class="top"><h1>Settings</h1></header>
+ <div class="card" style="margin-bottom:12px"><h2>Notification Settings</h2>${sw('email','Email Notifications',c.email)}${sw('push','Push Notifications',c.push)}
+ ${sw('temp','High Device Temperature',c.cats.temp)}${sw('batt','Low Battery',c.cats.batt)}${sw('stor','Storage Almost Full',c.cats.stor)}${sw('net','Unusual Network Activity',c.cats.net)}${sw('iot','IoT Sensor Anomaly',c.cats.iot)}
+ <p class="mu sm">Emails are sent by your backend/n8n flow, not by this page. Press Save to apply.</p></div>
+ <div class="card"><h2>Monitoring</h2><p><label>Polling (seconds) <input id="poll" type="number" min="5" value="${c.poll}" style="width:90px"></label></p>
+ <p><label>Alert cooldown (minutes) <input id="cd" type="number" min="1" value="${c.cooldown}" style="width:90px"></label></p>
+ <p class="mu sm">Backend: <b>${esc(S.cfg.base||'Not connected')}</b></p>
+  <p id="fl" role="status"></p><button class="b p" id="sv">Save</button> <button class="b" id="clr">Clear alert history</button></div>`}
+
+function render(){
+ if(!S.user&&!S.guest)return;
+ const p=document.activeElement&&document.activeElement.id;
+ if(S.tab==='set'&&p&&['poll','cd','tok'].includes(p))return;
+ navSync();$('#m').innerHTML=!S.ev?'<div class="card mu">Loading…</div>':topbar()+(S.tab==='dash'?dash():S.tab==='devices'?devicesPage():S.tab==='alerts'?alertsPage():settings())}
+function navSync(){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===S.tab))}
+
+document.addEventListener('click',async e=>{
+ const t=e.target;
+ const nb=t.closest('[data-t]');if(nb){location.hash='#/'+TP[nb.dataset.t];return}
+ if('demo' in t.dataset){S.demo=t.dataset.demo||null;await refresh();return}
+ if(t.dataset.res){const a=allAlerts().find(x=>x.id===t.dataset.res);e.stopPropagation();if(a&&a.srv){try{await api('/api/alerts/'+encodeURIComponent(a.sid),{method:'PATCH',body:JSON.stringify({status:'RESOLVED'})});a.status='RESOLVED'}catch(x){S.remoteErr='Unable to resolve this alert. Please try again.'}}else if(a)a.status='RESOLVED';save();render();return}
+ const al=t.closest('[data-a]');if(al){S.sel=al.dataset.a;if(S.tab==='alerts')render();else location.hash='#/alerts';return}
+ if(t.id==='sv'){S.cfg.poll=Math.max(5,+$('#poll').value||30);S.cfg.cooldown=Math.max(1,+$('#cd').value||10);save();startPoll();await refresh();
+  if(S.user){try{await api('/api/settings/notifications',{method:'PUT',body:JSON.stringify({email:S.cfg.email,push:S.cfg.push,cats:S.cfg.cats})});flash('Settings saved successfully',true)}catch(x){flash('Settings could not be saved. Please try again.')}}else flash('Sign in to save notification settings.');return}
+ if(t.id==='clr'){S.alerts=[];save();render()}
+});
+document.addEventListener('change',e=>{const k=e.target.dataset.sw;if(!k)return;
+ if(k in S.cfg.cats)S.cfg.cats[k]=e.target.checked;else S.cfg[k]=e.target.checked});
+let timer;function startPoll(){clearInterval(timer);timer=setInterval(refresh,S.cfg.poll*1000)}
+window.addEventListener('beforeunload',()=>clearInterval(timer));
+// ---- Authentication (access token in memory only; refresh token is an HttpOnly cookie set by your backend) ----
+const EM=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const pwOk=p=>p.length>=8&&/[A-Z]/.test(p)&&/[a-z]/.test(p)&&/\d/.test(p);
+const BAD='Unexpected response from SecureMonitor AI. Please try again later.',DOWN='The sign-in service is not available right now. Please try again later.';
+const GEN='Unable to connect to SecureMonitor AI. Please try again.';
+const backendMessage=(status,d)=>{
+ if(status===400)return d&&d.error==='invalid'?'Please check your details and password requirements.':'Invalid request. Please check your details.';
+ if(status===401)return 'Invalid email or password.';
+ if(status===409)return 'An account with this email already exists.';
+ if(status===429)return 'Too many attempts. Please wait a minute and try again.';
+ if(status>=500)return 'SecureMonitor AI server error. Please try again shortly.';
+ return d&&typeof d.error==='string'?d.error:GEN;
+};
+async function authPost(path,body){
+ if(!S.cfg.base)return{err:'SecureMonitor AI backend is unavailable. Please deploy the SecureMonitor server before signing in.'};
+ try{const r=await raw(path,{method:'POST',body:JSON.stringify(body||{})});let d={};try{d=await r.json()}catch(e){}return{ok:r.ok,status:r.status,d}}
+ catch(e){console.error('[SecureMonitor] request failed:',path,'->',S.cfg.base,e&&e.message);return{err:GEN}}}
+const TP={dash:'dashboard',devices:'devices',alerts:'alerts',set:'settings'},TR={dashboard:'dash',devices:'devices',alerts:'alerts',settings:'set'};
+const AR={login:'login',register:'register','forgot-password':'forgot','reset-password':'reset'},PATH={login:'login',register:'register',forgot:'forgot-password',reset:'reset-password'};
+const curP=()=>location.hash.replace(/^#\/?/,'').split('?')[0];
+function route(){
+ const [,qs]=location.hash.split('?'),q=new URLSearchParams(qs||''),p=curP();
+ if(q.get('token')){S.resetToken=q.get('token');try{history.replaceState(null,'','#/reset-password')}catch(e){}}
+ 
+ if(S.resetToken&&!S.user&&!S.guest&&!AR[p]){S.screen='reset';return showAuth()}
+ if(AR[p]){if(S.user){location.hash='#/dashboard';return}S.screen=AR[p];return showAuth()}
+ if(TR[p]){if(!S.user&&!S.guest){location.hash='#/login';return}S.tab=TR[p];return render()}
+ location.hash=(S.user||S.guest)?'#/dashboard':'#/login'}
+window.addEventListener('hashchange',route);
+function flash(m,ok){const x=$('#fl');if(x){x.textContent=m;x.className=ok?'ok sm':'err sm';x.style.wordBreak='break-all'}}
+function say(m,ok){S.authMsg=m;S.authOk=!!ok;const x=$('#amsg');if(x){x.textContent=m;x.className=ok?'ok':'err'}return false}
+function go(s,m,ok){S.authMsg=m||'';S.authOk=!!ok;S.screen=s;const h='#/'+PATH[s];if(location.hash===h)showAuth();else location.hash=h}
+function expire(){S.user=null;S.access=null;S.guest=false;go('login','Your session has expired. Please log in again.')}
+function showAuth(){
+ document.querySelector('aside').hidden=true;document.querySelector('.app').style.gridTemplateColumns='1fr';document.querySelector('.app').classList.add('authmode');
+ const L=(id,t,ty='text',ex='')=>`<label for="${id}">${t}</label><input id="${id}" name="${id}" type="${ty}" ${ex}>`;
+ const sh=`<label class="sm mu" style="display:flex;gap:6px;align-items:center;margin:6px 0"><input type="checkbox" data-act="show" style="width:auto;min-height:0"> Show password</label>`;
+
+ const btn=t=>`<button class="b p" style="width:100%;margin-top:12px">${t}</button>`;
+ const lk=(s,t)=>`<button type="button" class="l" style="color:var(--cyan);background:none;border:0;padding:6px 0;font:inherit;cursor:pointer" data-go="${s}">${t}</button>`;
+ const req=`<ul class="mu sm"><li>At least 8 characters</li><li>One uppercase letter</li><li>One lowercase letter</li><li>One number</li></ul>`;
+ const F={
+ login:`<h1>Welcome back</h1><p class="mu">Sign in to monitor your devices securely.</p><form id="f-login" novalidate>${L('email','Email','email','autocomplete="username"')}${L('password','Password','password','autocomplete="current-password"')}${sh}
+  <label class="sm" style="display:flex;gap:6px;align-items:center"><input type="checkbox" name="remember" style="width:auto;min-height:0"> Remember me</label>${btn('Sign In')}</form>
+  ${lk('forgot','Forgot password?')}<p class="mu" style="margin:6px 0 0">Don't have an account? ${lk('register','Create Account')}</p>`,
+ register:`<h1>Create your account</h1><form id="f-register" novalidate>${L('name','Full Name','text','autocomplete="name"')}${L('email','Email','email','autocomplete="username"')}${L('password','Password','password','autocomplete="new-password"')}${L('confirm','Confirm Password','password','autocomplete="new-password"')}${sh}${req}${btn('Create Account')}</form>
+  <p class="mu">Already have an account? ${lk('login','Sign In')}</p>`,
+ forgot:`<h1>Forgot your password?</h1><p class="mu">Enter your email and we'll send you a password reset link.</p><form id="f-forgot" novalidate>${L('email','Email address','email')}${btn('Send Reset Link')}</form>${lk('login','Back to Sign In')}`,
+ reset:`<h1>Reset your password</h1><form id="f-reset" novalidate>${L('password','New Password','password','autocomplete="new-password"')}${L('confirm','Confirm New Password','password','autocomplete="new-password"')}${sh}${req}${btn('Reset Password')}</form>`};
+ $('#m').innerHTML=`<div class="authwrap"><div class="auth card"><div class="logo" style="font-size:16px"><i></i>SecureMonitor AI</div>${F[S.screen]}<p id="amsg" class="${S.authOk?'ok':'err'}" role="alert">${esc(S.authMsg)}</p>
+</div></div>`}
+function openApp(){
+ document.querySelector('aside').hidden=false;document.querySelector('.app').style.gridTemplateColumns='';document.querySelector('.app').classList.remove('authmode');
+ $('#usr').innerHTML=(S.user?`<b style="color:var(--tx)">${esc(S.user.name||'Account')}</b><br>${esc(S.user.email||'')}`:'Guest · this device only')+`<button class="b" data-act="logout" style="margin-top:10px;width:100%;display:flex;gap:8px;align-items:center;justify-content:center">${OUT}${S.user?'Logout':'Sign in'}</button>`;
+ let p=curP();if(!TR[p]){try{history.replaceState(null,'','#/dashboard')}catch(e){}p='dashboard'}S.tab=TR[p];
+ refresh();startPoll()}
+async function enter(){
+ try{const u=await api('/api/auth/me');if(!u||typeof u.email!=='string')throw 0;S.user=u}catch(e){S.access=null;return go('login',S.authMsg||GEN)}
+ openApp()}
+async function logout(){
+ if(S.user)await authPost('/api/auth/logout');
+ clearInterval(timer);S.user=null;S.access=null;S.guest=false;S.remote=null;S.alerts=S.alerts;go('login')}
+document.addEventListener('click',async e=>{
+ const t=e.target,a=t.dataset&&t.dataset.act;
+ if(t.dataset&&t.dataset.go)return go(t.dataset.go);
+ 
+ if(a==='hw'){try{const k=await api('/api/devices/agent-key',{method:'POST'});if(!k||typeof k.key!=='string')throw 0;flash('Agent key (shown once): '+k.key+'  Send it as the X-Device-Key header to POST '+S.cfg.base+'/api/telemetry/laptop, /mobile or /iot.',true)}catch(e){flash('This feature is not configured yet.')}}
+ if(a==='guest'){S.guest=true;openApp()}
+ if(a==='logout')logout();
+ });
+document.addEventListener('change',e=>{if(e.target.dataset.act==='show')document.querySelectorAll('.auth input[type=password],.auth input[data-pw]').forEach(i=>{i.type=e.target.checked?'text':'password';i.dataset.pw=1})});
+document.addEventListener('submit',async e=>{e.preventDefault();const bt=e.target.querySelector('button.p'),o=bt.textContent;bt.disabled=true;bt.textContent=({'f-login':'Signing in...','f-register':'Creating account...','f-forgot':'Sending...','f-reset':'Resetting...'})[e.target.id];try{await submitForm(e)}finally{if(bt.isConnected){bt.disabled=false;bt.textContent=o}}});
+async function submitForm(e){const f=e.target,id=f.id,v=n=>((f.elements[n]||{}).value||'');say('');
+ if(id==='f-login'){const em=v('email').trim(),pw=v('password');
+  if(!em)return say('Please enter your email.');if(!pw)return say('Please enter your password.');
+  const r=await authPost('/api/auth/login',{email:em,password:pw,remember:f.elements.remember.checked});
+  if(r.err)return say(r.err);if(r.status===404||r.status===405)return say(DOWN);if(!r.ok)return say(r.status===403?'You do not have access to this account.':backendMessage(r.status,r.d));if(typeof r.d.accessToken!=='string')return say(BAD);
+  S.access=r.d.accessToken||null;return enter()}
+ if(id==='f-register'){const n=v('name').trim(),em=v('email').trim(),pw=v('password');
+  if(!n||!em||!pw||!v('confirm'))return say('Please fill in all fields.');
+  if(!EM.test(em))return say('Please enter a valid email address.');
+  if(!pwOk(pw))return say('Password does not meet the requirements.');
+  if(pw!==v('confirm'))return say('Passwords do not match.');
+  const r=await authPost('/api/auth/register',{name:n,email:em,password:pw});
+  if(r.err)return say(r.err);if(r.status===409)return say('An account with this email already exists.');
+  if(r.status===404||r.status===405)return say(DOWN);if(!r.ok)return say(backendMessage(r.status,r.d));
+  if(typeof r.d.accessToken==='string'){S.access=r.d.accessToken;return enter()}
+  return go('login','Account created. Please sign in.',true)}
+ if(id==='f-forgot'){const em=v('email').trim();
+  if(!EM.test(em))return say('Please enter a valid email address.');
+  const r=await authPost('/api/auth/forgot-password',{email:em});
+  if(r.err)return say(r.err);
+  return say('If an account exists for this email address, a password reset link has been sent.',true)}
+ if(id==='f-reset'){const pw=v('password');
+  if(!pwOk(pw))return say('Password does not meet the requirements.');
+  if(pw!==v('confirm'))return say('Passwords do not match.');
+  const r=await authPost('/api/auth/reset-password',{token:S.resetToken,password:pw});
+  if(r.err)return say(r.err);if(!r.ok)return say('This reset link is invalid or has expired.');
+  S.resetToken=null;return go('login','Password updated. Please sign in.',true)}
+}
+(async()=>{
+ await pickBase();
+ if(curP()!=='reset-password'&&!location.hash.includes('token=')&&S.cfg.base&&await refreshSession())return enter();
+ route()})();
+</script></body></html>
